@@ -1,21 +1,25 @@
-var express = require("express");
-var bodyParser = require("body-parser");
-var mongoose = require("mongoose");
-
+const express = require("express");
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+const passport = require("passport");
+const localStrategy = require("passport-local").Strategy;
 
 
 // Initialize Express
 var PORT = 3001;
 var app = express();
 
-
-// Use morgan logger for logging requests
-app.use(logger("dev"));
 // Use body-parser for handling form submissions
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-// Use express.static to serve the public folder as a static directory
-// app.use(express.static("public"));
+//set up passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+const User= require('./models/user');
+passport.use(new LocalStrategy(Account.authenticate()));
+passport.serializeUser(Account.serializeUser());
+passport.deserializeUser(Account.deserializeUser());
 
 // Connect to the Mongo DB
 mongoose.connect("mongodb://localhost/passportpractice");
